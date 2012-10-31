@@ -2,26 +2,25 @@
 
 namespace Etcpasswd\OAuthBundle\Provider\Token;
 
-/**
- *
- * @author   Marcel Beerta <marcel@etcpasswd.de>
- */
-class GithubToken implements TokenResponseInterface
+class TwitterToken implements TokenResponseInterface
 {
-    private $json;
+
+
     private $accessToken;
 
     /**
      * Constructs a new token
      *
-     * @param object $jsonObject  Json object
      * @param string $accessToken Api access token
      *
      * @return void
      */
-    public function __construct($jsonObject, $accessToken)
+    public function __construct($accessToken)
     {
-        $this->json = $jsonObject;
+//             ["oauth_token"]=> string(46) "17892816-n2b6KI0EyJVKWMVBhkMsG9MAXQGgBoNRT01dE"
+//             ["oauth_token_secret"]=> string(42) "8ZEBWzcosMjK830Dn6nwatCmJKMIRz5l6kd59kKNGw"
+//             ["user_id"]=> string(8) "17892816"
+//             ["screen_name"]=> string(9) "kyaroslav"
         $this->accessToken = $accessToken;
     }
 
@@ -30,15 +29,15 @@ class GithubToken implements TokenResponseInterface
      */
     public function getExpires()
     {
-        throw new \LogicException('Token does not expire');
+        return $this->expiresAt;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getUsername($field = 'login')
+    public function getUsername($field = 'screen_name')
     {
-        return $this->json->$field;
+        return $this->accessToken[$field];
     }
 
     /**
@@ -56,12 +55,12 @@ class GithubToken implements TokenResponseInterface
 
     public function getProviderKey()
     {
-        return 'github';
+        return 'twitter';
     }
 
     public function getJson()
     {
-        return $this->json;
+        return $this->accessToken;
     }
 
     /**
@@ -72,6 +71,7 @@ class GithubToken implements TokenResponseInterface
      */
     function getSocialId()
     {
-        // TODO: Implement getSocialId() method.
+        $data = $this->getJson();
+        return $data['user_id'];
     }
 }

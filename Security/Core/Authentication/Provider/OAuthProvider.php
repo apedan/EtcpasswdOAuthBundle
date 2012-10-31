@@ -17,14 +17,12 @@ use Etcpasswd\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 class OAuthProvider implements AuthenticationProviderInterface
 {
     private $userProvider;
-    private $userChecker;
     private $providerKey;
     private $encoderFactory;
 
     public function __construct(UserProviderInterface $userProvider, $providerKey)
     {
         $this->userProvider = $userProvider;
-        $this->providerKey  = $providerKey;
     }
 
     /**
@@ -32,11 +30,27 @@ class OAuthProvider implements AuthenticationProviderInterface
      */
     public function authenticate(TokenInterface $token)
     {
-        $user = $this->userProvider->loadUserByUsername($token->getUsername());
+        $user = $this->userProvider->loadUserBySocialId($token->getSocialId());
+
+        try {
+            $this->userProvider->checkPostAuth($user);
+        } catch (AccountStatusException $e) {
+            // Don't authenticate locked, disabled or expired users
+            throw new AuthenticationException($e->getMessage(), null, 0, $e);
+        } catch (AuthenticationException $passthroughEx) {
+            throw $passthroughEx;
+        } catch (\Exception $ex) {
+            throw new AuthenticationException($ex->getMessage(), null, 0, $ex);
+        }
+
         if ($user) {
             $authenticatedToken = new OAuthToken($user->getRoles(), $token->getResponse());
             $authenticatedToken->setAuthenticated(true);
             $authenticatedToken->setUser($user);
+
+            $provider = $token->getAttribute('via');
+            $data = $token->getAttribute('data');
+            $this->userProvider->updateSocialData($user, $provider, $data);
 
             return $authenticatedToken;
         }

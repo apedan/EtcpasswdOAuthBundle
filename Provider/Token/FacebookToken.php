@@ -66,4 +66,15 @@ class FacebookToken implements TokenResponseInterface
     {
         return $this->json;
     }
+
+    /**
+     * Returns the uniq used id assigned to user by social network
+     * id
+     *
+     * @returun id
+     */
+    function getSocialId()
+    {
+        return $this->getJson()->id;
+    }
 }

@@ -24,7 +24,12 @@ class OAuthToken extends AbstractToken
 
     public function getCredentials()
     {
-        return $this->response->getAccessToken();
+        $token = "";
+        if ($this->response)
+        {
+            $token = $this->response->getAccessToken();
+        }
+        return $token;
     }
 
     public function eraseCredentials()
@@ -36,6 +41,16 @@ class OAuthToken extends AbstractToken
     public function getResponse()
     {
         return $this->response;
+    }
+
+    public function getSocialId()
+    {
+        $id = "";
+        if ($this->response)
+        {
+            $id = $this->response->getSocialId();
+        }
+        return $id;
     }
 
 }

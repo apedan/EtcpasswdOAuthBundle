@@ -31,4 +31,6 @@ interface ProviderInterface
     * @return string
     */
     function getAuthorizationUrl($clientId, $scope, $redirectUrl);
+
+    function setOptions($options, $request);
 }

@@ -17,6 +17,8 @@ use Symfony\Component\Security\Http\Firewall\AbstractAuthenticationListener,
 
 use Etcpasswd\OAuthBundle\Provider\ProviderInterface,
     Etcpasswd\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\HttpFoundation\Cookie;
 
 /**
  * Authentication listener handling OAuth Authentication requests
@@ -61,12 +63,12 @@ class OAuthListener extends AbstractAuthenticationListener
      */
     protected function attemptAuthentication(Request $request)
     {
-
         // redirect to auth provider
         if ($this->httpUtils->checkRequestPath($request, $this->options['login_path'])) {
             return $this->createProviderRedirectResponse($request);
         }
 
+        $this->oauthProvider->setOptions($this->options, $request);
         $code = $request->get('code');
         $token = $this->oauthProvider
             ->createTokenResponse(
@@ -89,12 +91,27 @@ class OAuthListener extends AbstractAuthenticationListener
         $authToken = new OAuthToken(array(), $token);
         $authToken->setUser($username);
 
-        return $this->authenticationManager
-            ->authenticate($authToken);
+        $authResult = null;
+
+        try {
+            $authResult = $this->authenticationManager->authenticate($authToken);
+        } catch (UsernameNotFoundException $failed) {
+
+            //$url = $this->httpUtils->generateUrl('link_account');
+            $response = $this->httpUtils->createRedirectResponse($request, '/app_dev.php/link-account');
+
+            /* @var $request \Symfony\Component\HttpFoundation\Request */
+            $session = $request->getSession();
+            $session->set('service', $authToken->getAttribute('via'));
+            $session->set('social_id', $authToken->getSocialId());
+        }
+
+        return (is_null($authResult)) ? $response: $authResult;
     }
 
     private function createProviderRedirectResponse(Request $request)
     {
+        $this->oauthProvider->setOptions($this->options, $request);
         $url = $this->oauthProvider->getAuthorizationUrl(
             $this->options['client_id'],
             $this->options['scope'],

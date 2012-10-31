@@ -58,4 +58,9 @@ class GoogleProvider extends Provider
             .'&scope='.urlencode($scope)
             .'&response_type=code';
     }
+
+    function setOptions($options, $request)
+    {
+        // TODO: Implement setOptions() method.
+    }
 }

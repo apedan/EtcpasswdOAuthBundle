@@ -24,6 +24,7 @@
         <service id="etcpasswd_oauth.authentication.provider.oauth" class="%etcpasswd_oauth.authentication.provider.oauth.class%">
             <argument /> <!-- User Provider -->
             <argument /> <!-- Provider-shared Key -->
+            <argument /> <!-- User Checker -->
         </service>
 
         <!-- security listener -->
@@ -54,13 +55,13 @@
             class="Etcpasswd\OAuthBundle\Provider\GoogleProvider"
             parent="etcpasswd_oauth.provider.abstract"
             public="false" />
-        <!--
+
         <service id="etcpasswd_oauth.provider.twitter"
-            class="Etcpasswd\OAuthBundle\Provider\FacebookProvider"
+            class="Etcpasswd\OAuthBundle\Provider\TwitterProvider"
             parent="etcpasswd_oauth.provider.abstract"
             public="false" />
 
-
+        <!--
 
         <service id="etcpasswd_oauth.provider.yahoo"
             class="Etcpasswd\OAuthBundle\Provider\FacebookProvider"

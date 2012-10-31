@@ -50,4 +50,9 @@ class FacebookProvider extends Provider
             .'&redirect_uri='.$redirectUrl
             .'&scope='.$scope;
     }
+
+    function setOptions($options, $request)
+    {
+        // TODO: Implement setOptions() method.
+    }
 }

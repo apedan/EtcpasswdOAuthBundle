@@ -46,4 +46,12 @@ interface TokenResponseInterface
      * @returun string
      */
     function getProviderKey();
+
+    /**
+     * Returns the uniq used id assigned to user by social network
+     * id
+     *
+     * @returun id
+     */
+    function getSocialId();
 }
