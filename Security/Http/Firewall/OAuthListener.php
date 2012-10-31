@@ -96,9 +96,7 @@ class OAuthListener extends AbstractAuthenticationListener
         try {
             $authResult = $this->authenticationManager->authenticate($authToken);
         } catch (UsernameNotFoundException $failed) {
-
-            //$url = $this->httpUtils->generateUrl('link_account');
-            $response = $this->httpUtils->createRedirectResponse($request, '/app_dev.php/link-account');
+            $response = $this->httpUtils->createRedirectResponse($request, 'link_account');
 
             /* @var $request \Symfony\Component\HttpFoundation\Request */
             $session = $request->getSession();
