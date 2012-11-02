@@ -48,10 +48,6 @@ class OAuthProvider implements AuthenticationProviderInterface
             $authenticatedToken->setAuthenticated(true);
             $authenticatedToken->setUser($user);
 
-            $provider = $token->getAttribute('via');
-            $data = $token->getAttribute('data');
-            $this->userProvider->updateSocialData($user, $provider, $data);
-
             return $authenticatedToken;
         }
 
@@ -62,4 +58,5 @@ class OAuthProvider implements AuthenticationProviderInterface
     {
         return $token instanceof OAuthToken;
     }
+
 }

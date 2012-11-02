@@ -102,6 +102,7 @@ class OAuthListener extends AbstractAuthenticationListener
             $session = $request->getSession();
             $session->set('service', $authToken->getAttribute('via'));
             $session->set('social_id', $authToken->getSocialId());
+            $session->set('social_data', $authToken->getResponse());
         }
 
         return (is_null($authResult)) ? $response: $authResult;

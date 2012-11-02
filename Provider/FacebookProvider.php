@@ -22,7 +22,6 @@ class FacebookProvider extends Provider
             .'&redirect_uri='.$redirectUrl
             .'&client_secret='.$secret
             .'&code='.$code;
-
         parse_str($this->request($url), $result);
 
         if (isset($result['error'])) {
