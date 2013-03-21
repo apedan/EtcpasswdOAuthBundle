@@ -19,6 +19,13 @@
             <tag name="security.listener.factory" />
         </service>
 
+        <service id="etcpasswd_oauth.security.factory.vk"
+                 class="%etcpasswd_oauth.security.factory.class%"
+                 public="false">
+            <call method="setKey"><argument>oauth_vk</argument></call>
+            <tag name="security.listener.factory" />
+        </service>
+
         <service id="etcpasswd_oauth.security.factory.github"
             class="%etcpasswd_oauth.security.factory.class%"
             public="false">

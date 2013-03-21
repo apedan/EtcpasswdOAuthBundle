@@ -51,6 +51,10 @@
             class="Etcpasswd\OAuthBundle\Provider\FacebookProvider"
             parent="etcpasswd_oauth.provider.abstract"
             public="false" />
+        <service id="etcpasswd_oauth.provider.vk"
+                 class="Etcpasswd\OAuthBundle\Provider\VkProvider"
+                 parent="etcpasswd_oauth.provider.abstract"
+                 public="false" />
         <service id="etcpasswd_oauth.provider.google"
             class="Etcpasswd\OAuthBundle\Provider\GoogleProvider"
             parent="etcpasswd_oauth.provider.abstract"
