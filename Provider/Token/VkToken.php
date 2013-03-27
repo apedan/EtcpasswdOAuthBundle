@@ -39,9 +39,9 @@ class VkToken implements TokenResponseInterface
     /**
      * {@inheritDoc}
      */
-    public function getUsername($field = 'nickname')
+    public function getUsername($field = 'first_name')
     {
-        return $this->json->$field;
+        return (string) $this->json->$field;
     }
 
     /**
